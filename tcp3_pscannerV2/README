@@ -1,0 +1,5 @@
+This new version uses the getaddrinfo() socket system call for all functions.
+
+TODO
+- make program show all IPs obtained
+- make program handle to chose which IP to scan from resolution output
