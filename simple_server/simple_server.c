@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#define DATA 50
 #define S_PORT 7890
 
 void dump(char *, const unsigned int);
@@ -31,7 +32,8 @@ int main(void)
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))
 			== -1)
 		perror("setting socket option SO_REUSEADDR");
-
+	
+	/* initializing server address socket structure */
 	host_addr.sin_family = AF_INET;		/* host byte order */
 	host_addr.sin_port = htons(S_PORT);	/* port, network byte order */
 	host_addr.sin_addr.s_addr = 0;		/* use host address */
@@ -52,12 +54,12 @@ int main(void)
 		printf("server: got connection from %s port %d\n",
 			inet_ntoa(client_addr.sin_addr),
 			ntohs(client_addr.sin_port));
-		recv_length = recv(new_sockfd, &buffer, 1024, 0);
+		recv_length = recv(new_sockfd, &buffer, DATA, 0);
 
 		while (recv_length > 0) {
 			printf("RECV: %d bytes\n", recv_length);
 			dump(buffer, recv_length);
-			recv_length = recv(new_sockfd, &buffer, 1024, 0);
+			recv_length = recv(new_sockfd, &buffer, DATA, 0);
 		}
 	
 		close(new_sockfd);
