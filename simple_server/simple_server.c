@@ -1,5 +1,6 @@
 /*
- * A simple server to demonstrate TCP sockets implementation
+ * A simple server to demonstrate TCP sockets implementation. The server
+ * takes input from server and show
  */
 
 #include <stdio.h>
@@ -21,6 +22,8 @@ int main (void)
 	socklen_t sin_size;
 	int recv_length = 1, yes = 1;
 	char buffer[1024];
+	sin_size = sizeof(struct sockaddr_in);
+
 
 	if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		perror("in socket");
@@ -32,15 +35,16 @@ int main (void)
 	host_addr.sin_family = AF_INET;		/* host byte order */
 	host_addr.sin_port = htons(S_PORT);	/* port, network byte order */
 	host_addr.sin_addr.s_addr = 0;		/* use host address */
-	memset(&(host_addr.sin_zero), '\0', 8);	/* zero the rest of struct */
+	/* zero the rest of struct */
+	memset(&(host_addr.sin_zero), '\0', sizeof(host_addr.sin_zero));	
 
 	if(bind(sockfd, (struct sockaddr *)&host_addr, sizeof(struct sockaddr))
 			== -1)
 		perror("binding to socket");
 	if(listen(sockfd, 5) == -1)
 		perror("listening on socket");
+
 	while(1) {
-		sin_size = sizeof(struct sockaddr_in);
 		new_sockfd = accept(sockfd, (struct sockaddr *) &client_addr,
 				 &sin_size);
 		if(new_sockfd == -1)
@@ -55,7 +59,8 @@ int main (void)
 			dump(buffer, recv_length);
 			recv_length = recv(new_sockfd, &buffer, 1024, 0);
 		}
-	close(new_sockfd);
+	
+		close(new_sockfd);
 	}
 	return 0;
 }
