@@ -1,6 +1,6 @@
 /*
  * A simple server to demonstrate TCP sockets implementation. The server
- * takes input from server and show
+ * takes input from server and shows dump of the data.
  */
 
 #include <stdio.h>
