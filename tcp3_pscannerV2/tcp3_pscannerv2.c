@@ -27,21 +27,24 @@ void usage(char *name)
 
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-	int sockfd;
-	struct sockaddr_in *client_addr4;
-	struct sockaddr_in6 *client_addr6;
+	//int sockfd;
+	struct sockaddr_in client_addr4;
+	struct sockaddr_in6 client_addr6;
 	struct addrinfo hint;
 	struct addrinfo *rp;
+	struct str_host hresult;
 	char buff[DATA];
-	int counter1, counter2, result1;
+	int resv4, resv6;
 	
 	if ((argc < 2) || (argc > 2))
 		usage(argv[0]);
 
 	/* initializing address structure for destination IP */
 	memset(&client_addr4, 0, sizeof(struct sockaddr_in));
+	memset(&client_addr6, 0, sizeof(struct sockaddr_in6));
+	memset(&hint, 0, sizeof(struct addrinfo));
 
 	/* initializing addrinfo structure list */
 	hint.ai_flags = AI_ALL;
@@ -54,14 +57,33 @@ int main (int argc, char **argv)
 	hint.ai_next = NULL;
 
 	/* Converting the input address to network presentation */
-	result1 = inet_pton(AF_INET, argv[1], &client_addr4->sin_addr);
-	if(result1 < 0 )
-		perror("Error converting IP to hostname.\n");
+	resv4 = inet_pton(AF_INET, argv[1], &client_addr4.sin_addr);
+	resv6 = inet_pton(AF_INET6, argv[1], &client_addr6.sin6_addr);
+	if (resv4 == 0  && resv6 == 0) {
+		if (rsolvhost(&hint, &hresult, argv[1]) == 1) {
+			printf("Error resolving hostnames\n");
+			exit(1);
+		}
+		printf("\n\n# of IPv4 address found: %d\n", hresult.num_host4); 
+		printf("\n\n# of IPv6 address found: %d\n", hresult.num_host6);
+
+		free_rsolvhost(hresult.ptr_host);	
+	} else if (resv4 == 1)
+		printf("IPv4 address given\n");
 	else
-		/* try convert input to IP */
-		//printf("
+		printf("IPv6 address given\n");
+		
+
 	
-	printf("\n\n# of address found: %d\n", counter2); 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//if ((sockfd = socket(rp->ai_family, SOCK_STREAM, 0)) == -1)
 			//perror("Error in socket()");
 		//	continue;
@@ -75,12 +97,12 @@ int main (int argc, char **argv)
 		//		printf("Port %d is open\n", counter1);
 			//else
 			//fflush(stdout);
-			/* printf("Port %d is close\n", client_addr4.sin_port);*/
+			//printf("Port %d is close\n", client_addr4.sin_port);
 
 		//	close(sockfd);
 		//}
 	//fflush(stdout);
-	freeaddrinfo(rp);
+	//freeaddrinfo(rp);
 
 	return 0;
 }
