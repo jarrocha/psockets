@@ -12,7 +12,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <netdb.h>
+
+#include "hresolver.h"
 
 #define DATA 100 
 
@@ -24,20 +25,23 @@ void usage(char *name)
 	exit(0);
 }
 
+
+
 int main (int argc, char **argv)
 {
 	int sockfd;
-	struct sockaddr_in *client_addr;
+	struct sockaddr_in *client_addr4;
+	struct sockaddr_in6 *client_addr6;
 	struct addrinfo hint;
-	struct addrinfo *result, *rp;
+	struct addrinfo *rp;
 	char buff[DATA];
-	int counter1, result1, result2;
+	int counter1, counter2, result1;
 	
 	if ((argc < 2) || (argc > 2))
 		usage(argv[0]);
 
 	/* initializing address structure for destination IP */
-	memset(&client_addr, 0, sizeof(struct sockaddr_in));
+	memset(&client_addr4, 0, sizeof(struct sockaddr_in));
 
 	/* initializing addrinfo structure list */
 	hint.ai_flags = AI_ALL;
@@ -50,48 +54,33 @@ int main (int argc, char **argv)
 	hint.ai_next = NULL;
 
 	/* Converting the input address to network presentation */
-	result1 = inet_pton(AF_INET, argv[1], &client_addr->sin_addr);
+	result1 = inet_pton(AF_INET, argv[1], &client_addr4->sin_addr);
 	if(result1 < 0 )
-		//result2 =inet_pton(AF_INET6, argv[1],
 		perror("Error converting IP to hostname.\n");
 	else
 		/* try convert input to IP */
 		//printf("
-		if(getaddrinfo(argv[1], 0, &hint, &result) != 0)
-			printf("Error getaddrinfo()\n");
 	
-	
-	for (rp = result; rp != NULL; rp = rp->ai_next) {
-		if (rp->ai_family == AF_INET) {
-			printf("IPV4 detected\n");
-			client_addr = (struct sockaddr_in *) rp->ai_addr;
-			inet_ntop(AF_INET, &client_addr->sin_addr, buff, DATA);
-			printf("Address %s\n", buff);
-		} else if (rp->ai_family == AF_INET6)
-		       printf("IPV6 detected\n");
-
-
-		
-	}
-		//if ((sockfd = socket(rp->ai_family, SOCK_STREAM, 0)) == -1)
+	printf("\n\n# of address found: %d\n", counter2); 
+	//if ((sockfd = socket(rp->ai_family, SOCK_STREAM, 0)) == -1)
 			//perror("Error in socket()");
 		//	continue;
 
 		//for (counter1 = 0; counter1 < 65536; counter1++) {	
 			/* Setting the port number to scan */
-		//	client_addr.sin_port = htons(counter1);
+		//	client_addr4.sin_port = htons(counter1);
 
-		//	if((connect(sockfd, (struct sockaddr *) &client_addr, 
+		//	if((connect(sockfd, (struct sockaddr *) &client_addr4, 
 		//			sizeof(struct sockaddr_in)) == 0))
 		//		printf("Port %d is open\n", counter1);
 			//else
 			//fflush(stdout);
-			/* printf("Port %d is close\n", client_addr.sin_port);*/
+			/* printf("Port %d is close\n", client_addr4.sin_port);*/
 
 		//	close(sockfd);
 		//}
 	//fflush(stdout);
-	freeaddrinfo(result);
+	freeaddrinfo(rp);
 
 	return 0;
 }
