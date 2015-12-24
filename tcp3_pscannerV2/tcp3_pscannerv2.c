@@ -38,6 +38,10 @@ int main(int argc, char **argv)
 	char buff[DATA];
 	int resv4, resv6;
 	
+	/* variables for IP storing */
+	struct sockaddr_in **str_in;
+	struct sockaddr_in6 **str_in6;
+
 	if ((argc < 2) || (argc > 2))
 		usage(argv[0]);
 
@@ -64,20 +68,24 @@ int main(int argc, char **argv)
 			printf("Error resolving hostnames\n");
 			exit(1);
 		}
-		printf("\n\n# of IPv4 address found: %d\n", hresult.num_host4); 
+		printf("\n\n# of IPv4 address found: %d\n", hresult.num_host4);
 		printf("\n\n# of IPv6 address found: %d\n", hresult.num_host6);
 
-		free_rsolvhost(hresult.ptr_host);	
+		free_rsolvhost(hresult.ptr_host);
 	} else if (resv4 == 1)
 		printf("IPv4 address given\n");
 	else
 		printf("IPv6 address given\n");
 		
+	/* Allocating memory for storing IP arrays */
+	str_in = malloc(sizeof(str_in) * hresult.num_host4);
+	str_in6 = malloc(sizeof(str_in6) * hresult.num_host6);
 
+	/* Store IPs in arrays */
+	get_ip(&hint, &hresult, str_in, str_in6);
 	
 	
-	
-	
+
 	
 	
 	
