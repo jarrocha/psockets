@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall
 
-tcp3_pscannerv2:
+all:
 	@echo "Building target..."
 	$(CC) $(CFLAGS) -o tcp3_pscannerv2.o -C tcp3_pscannerv2.c hresolver.c
 

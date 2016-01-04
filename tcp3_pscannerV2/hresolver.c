@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <arpa/inet.h>
 
 #include "hresolver.h"
@@ -42,7 +43,7 @@ void get_ip(struct addrinfo *type, struct str_host *hresult,
 
 int rsolvhost(struct addrinfo *type, struct str_host *hresult, char *argv)
 {
-	int i, j;
+	int i, j, status;
 	char buff4[INET_ADDRSTRLEN];
 	char buff6[INET6_ADDRSTRLEN];
 	const char *pchar;
@@ -51,8 +52,8 @@ int rsolvhost(struct addrinfo *type, struct str_host *hresult, char *argv)
 	struct sockaddr_in6 *p6;
 	struct str_host *result = hresult;
 
-	if (getaddrinfo(argv, 0, type, &rp) != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_sterror(s));
+	if ((status = getaddrinfo(argv, 0, type, &rp)) != 0) {
+		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
 		exit(EXIT_FAILURE);
 	}
 	
