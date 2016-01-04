@@ -3,7 +3,7 @@ CFLAGS = -g -Wall
 
 all:
 	@echo "Building target..."
-	$(CC) $(CFLAGS) -o tcp3_pscannerv2.o -C tcp3_pscannerv2.c hresolver.c
+	$(CC) $(CFLAGS) -o main.o -C main.c hresolver.c
 
 clean:
 	@echo "Cleaning up.."

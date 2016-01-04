@@ -17,7 +17,4 @@ struct str_host {
 
 int rsolvhost(struct addrinfo *, struct str_host *, char *argv );
 
-void get_ip(struct addrinfo *, struct str_host *, struct sockaddr_in **,
-		struct sockaddr_in6 **);
-
 void free_rsolvhost(struct addrinfo *);

@@ -14,33 +14,6 @@
 
 #include "hresolver.h"
 
-void get_ip(struct addrinfo *type, struct str_host *hresult, 
-		struct sockaddr_in **str_in, struct sockaddr_in6 **str_in6)
-{
-	int i, j;
-	const char *data;
-	char buff4[INET_ADDRSTRLEN];
-	char buff6[INET6_ADDRSTRLEN];
-	struct addrinfo *tmp = hresult->ptr_host;
-	
-	for (i = 0, j = 0; tmp != NULL; tmp = tmp->ai_next) {
-		if (tmp->ai_family == AF_INET){
-			*(str_in + i++) = (struct sockaddr_in *) tmp->ai_addr;
-			data = inet_ntop(AF_INET, &(*str_in + i)->sin_addr, 
-					buff4, INET_ADDRSTRLEN);
-			printf("Address: %s\n", data?data:"unknown");
-			//printf("ipv4# %d\n", i);
-	/*	} else if (tmp->ai_family == AF_INET6) {
-			*(str_in6 + j++) = (struct sockaddr_in6 *) tmp->ai_addr;
-			inet_ntop(AF_INET6, &(*str_in6 + i)->sin6_addr, buff6,
-				INET6_ADDRSTRLEN);
-			printf("Address: %s\n", buff6?buff6:"unknown");
-			//printf("ipv6# %d\n", j);
-	*/}
-	}
-	
-}
-
 int rsolvhost(struct addrinfo *type, struct str_host *hresult, char *argv)
 {
 	int i, j, status;
@@ -80,15 +53,5 @@ int rsolvhost(struct addrinfo *type, struct str_host *hresult, char *argv)
 
 void free_rsolvhost(struct addrinfo *rp)
 {
-	/*
-	struct addrinfo *tmp1 = rp, *tmp2;
-	
-	while (tmp1 != NULL) {
-		tmp2 = tmp1->ai_next;
-		free(tmp1);
-		freeaddrinfo(tmp1);
-		tmp1 = tmp2;
-	}
-	*/
 	freeaddrinfo(rp);
 }

@@ -26,17 +26,17 @@ int main(int argc, char **argv)
 	struct sockaddr_in client_addr4;
 	struct sockaddr_in6 client_addr6;
 	struct addrinfo hint;
-	struct addrinfo *rp;
+	//struct addrinfo *rp;
 	struct str_host hresult;
-	char buff[INET_ADDRSTRLEN];
-	const char *ipstr;
+	//char buff[INET_ADDRSTRLEN];
+	//const char *ipstr;
 	int resv4, resv6;
-	int i, j;
+	//int i, j;
 
 	/* variables for IP storing */
-	struct sockaddr_in **str_in;
-	struct sockaddr_in *tmp_in;
-	struct sockaddr_in6 **str_in6;
+	//struct sockaddr_in **str_in;
+	//struct sockaddr_in *tmp_in;
+	//struct sockaddr_in6 **str_in6;
 
 	if ((argc < 2) || (argc > 2))
 		usage(argv[0]);
@@ -95,29 +95,6 @@ int main(int argc, char **argv)
 	free_rsolvhost(hresult.ptr_host);
 
 
-
-
-
-	//if ((sockfd = socket(rp->ai_family, SOCK_STREAM, 0)) == -1)
-			//perror("Error in socket()");
-		//	continue;
-
-		//for (counter1 = 0; counter1 < 65536; counter1++) {
-			/* Setting the port number to scan */
-		//	client_addr4.sin_port = htons(counter1);
-
-		//	if((connect(sockfd, (struct sockaddr *) &client_addr4,
-		//			sizeof(struct sockaddr_in)) == 0))
-		//		printf("Port %d is open\n", counter1);
-			//else
-			//fflush(stdout);
-			//printf("Port %d is close\n", client_addr4.sin_port);
-
-		//	close(sockfd);
-		//}
-	//fflush(stdout);
-	//freeaddrinfo(rp);
-
 	return(EXIT_SUCCESS);
 }
 
@@ -127,5 +104,5 @@ void usage(char *name)
 	printf("Usage:\n");
 	printf("%s [IP | HOSTNAME]\n", name);
 	printf("Ipv4/6 compatible.\n");
-	exit(0);
+	exit(EXIT_FAILURE);
 }
