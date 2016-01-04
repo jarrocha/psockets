@@ -15,16 +15,8 @@
 
 #include "hresolver.h"
 
-#define DATA 100 
-
-void usage(char *name)
-{
-	printf("Usage:\n");
-	printf("%s [IP | HOSTNAME]\n", name);
-	printf("Ipv4/6 compatible.\n");
-	exit(0);
-}
-
+/* Prototypes */
+void usage(char *);
 
 
 int main(int argc, char **argv)
@@ -35,11 +27,14 @@ int main(int argc, char **argv)
 	struct addrinfo hint;
 	struct addrinfo *rp;
 	struct str_host hresult;
-	char buff[DATA];
+	char buff[INET_ADDRSTRLEN];
+	const char *ipstr;
 	int resv4, resv6;
-	
+	int i, j;
+
 	/* variables for IP storing */
 	struct sockaddr_in **str_in;
+	struct sockaddr_in *tmp_in;
 	struct sockaddr_in6 **str_in6;
 
 	if ((argc < 2) || (argc > 2))
@@ -71,36 +66,46 @@ int main(int argc, char **argv)
 		printf("\n\n# of IPv4 address found: %d\n", hresult.num_host4);
 		printf("\n\n# of IPv6 address found: %d\n", hresult.num_host6);
 
-		free_rsolvhost(hresult.ptr_host);
 	} else if (resv4 == 1)
 		printf("IPv4 address given\n");
 	else
 		printf("IPv6 address given\n");
-		
-	/* Allocating memory for storing IP arrays */
+
+	/* Allocating memory for storing IP arrays
 	str_in = malloc(sizeof(str_in) * hresult.num_host4);
 	str_in6 = malloc(sizeof(str_in6) * hresult.num_host6);
 
-	/* Store IPs in arrays */
+	Store IPs in arrays
 	get_ip(&hint, &hresult, str_in, str_in6);
-	
-	
 
-	
-	
-	
-	
-	
-	
+
+
+	printf("IPv4:\n");
+	for (i = 0; i < 50; i++) {
+		memset(&buff, 0, sizeof(buff));
+		tmp_in = (*str_in + i);
+		inet_ntop(AF_INET, &tmp_in->sin_addr, buff,
+			INET_ADDRSTRLEN);
+		if(buff != NULL)
+			printf("%s\n", buff);
+	}
+	*/
+
+	free_rsolvhost(hresult.ptr_host);
+
+
+
+
+
 	//if ((sockfd = socket(rp->ai_family, SOCK_STREAM, 0)) == -1)
 			//perror("Error in socket()");
 		//	continue;
 
-		//for (counter1 = 0; counter1 < 65536; counter1++) {	
+		//for (counter1 = 0; counter1 < 65536; counter1++) {
 			/* Setting the port number to scan */
 		//	client_addr4.sin_port = htons(counter1);
 
-		//	if((connect(sockfd, (struct sockaddr *) &client_addr4, 
+		//	if((connect(sockfd, (struct sockaddr *) &client_addr4,
 		//			sizeof(struct sockaddr_in)) == 0))
 		//		printf("Port %d is open\n", counter1);
 			//else
@@ -112,6 +117,14 @@ int main(int argc, char **argv)
 	//fflush(stdout);
 	//freeaddrinfo(rp);
 
-	return 0;
+	return(EXIT_SUCCESS);
 }
 
+
+void usage(char *name)
+{
+	printf("Usage:\n");
+	printf("%s [IP | HOSTNAME]\n", name);
+	printf("Ipv4/6 compatible.\n");
+	exit(0);
+}
