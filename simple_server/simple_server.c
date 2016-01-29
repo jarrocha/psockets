@@ -18,17 +18,18 @@ void dump(char *, const unsigned int);
 
 int main(void)
 {
+	/* server socket variables */
 	int sockfd, new_sockfd;
 	struct sockaddr_in host_addr, client_addr;
-	socklen_t sin_size;
+	socklen_t sin_size = sizeof(struct sockaddr_in);
 	int recv_length = 1, yes = 1;
+	
+	/* data holding */
 	char buffer[1024];
-	sin_size = sizeof(struct sockaddr_in);
 
-
+	/* defining listening socket descriptor */
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		perror("in socket");
-
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))
 			== -1)
 		perror("setting socket option SO_REUSEADDR");
@@ -37,15 +38,20 @@ int main(void)
 	host_addr.sin_family = AF_INET;		/* host byte order */
 	host_addr.sin_port = htons(S_PORT);	/* port, network byte order */
 	host_addr.sin_addr.s_addr = 0;		/* use host address */
+
 	/* zero the rest of struct */
 	memset(&(host_addr.sin_zero), '\0', sizeof(host_addr.sin_zero));
 
+	/* bind socket to IP address */ 
 	if (bind(sockfd, (struct sockaddr *)&host_addr, sizeof(struct sockaddr))
 			== -1)
 		perror("binding to socket");
+	
+	/* listen on socket */ 
 	if (listen(sockfd, 5) == -1)
 		perror("listening on socket");
-
+	
+	/* main procedure */
 	while (1) {
 		new_sockfd = accept(sockfd, (struct sockaddr *) &client_addr,
 				 &sin_size);
