@@ -1,10 +1,14 @@
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -Wall
+OUT= psniff
+IN= pniff.c
 
-%:
+all:
 	@echo "Building target..."
-	$(CC) $(CFLAGS) -o $*.o -C $*.c
-
+	$(CC) $(CFLAGS) -o $(OUT) -C $(IN)
+debug:
+	@echo "Building for debugging"
+	$(CC) $(CFLAGS) -g -o $(OUT) -C $(IN)
 clean:
 	@echo "Cleaning up.."
-	rm -rf *.o
+	rm -rf $(OUT)
