@@ -29,6 +29,11 @@
 
 #define BUFF 65536
 
+
+/* procpkt.c */
+void proc_packet(const u_char *, u_int); 
+
+
 /*
  * Ethernet frame header
  */

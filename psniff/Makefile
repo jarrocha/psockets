@@ -5,7 +5,7 @@ IN= psniff.c
 
 all:
 	@echo "Building target..."
-	$(CC) $(CFLAGS) -o $(OUT) -C $(IN) hello.c
+	$(CC) $(CFLAGS) -o $(OUT) -C $(IN) procpkt.c
 debug:
 	@echo "Building for debugging"
 	$(CC) $(CFLAGS) -g -o $(OUT) -C $(IN)
