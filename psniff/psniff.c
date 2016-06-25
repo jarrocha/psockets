@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 		usage(argv[0]);
 	
 	
-	if((trx_fd = socket(PF_INET, SOCK_RAW, IPPROTO_TCP)) == -1)
+	if((trx_fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) == -1)
 		err_msg("Error on socket()");
 	if((setsockopt(trx_fd, SOL_SOCKET, SO_BINDTODEVICE, argv[1], 
 			strlen(argv[1]) + 1)) == -1)

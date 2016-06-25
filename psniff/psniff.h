@@ -28,7 +28,7 @@
 #include <arpa/inet.h> 
 
 #define BUFF 65536
-
+#define ETH_P_ALL 0x0003
 
 /* procpkt.c */
 void proc_packet(const u_char *, u_int); 
@@ -52,6 +52,7 @@ struct ether_hdr {
  * Note: Supports Little-Endian only
  */
 
+#define IP_HDR_LEN 20
 struct ip_hdr {
 	unsigned char ver_ihl;
 	unsigned char tos;
