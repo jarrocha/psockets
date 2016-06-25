@@ -1,6 +1,0 @@
-./basic_sniffer/basic_sniffer.c
-./simple_server/simple_server.c
-./tcp3_pscannerV1/tcp3_pscanner.c
-./tcp3_pscannerV2/hresolver.c
-./tcp3_pscannerV2/hresolver.h
-./tcp3_pscannerV2/tcp3_pscannerv2.c
