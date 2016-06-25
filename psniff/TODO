@@ -1,2 +1,2 @@
--Finish handling of tcp, icmp, udp layers
--add multithreading handling of packets.
+- Finish handling of icmp layer support.
+- Add multithreading handling of packets.
