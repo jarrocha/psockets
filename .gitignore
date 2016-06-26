@@ -28,6 +28,7 @@
 *.x86_64
 *.hex
 get_http
+psniff
 
 # Debug files
 *.dSYM/
