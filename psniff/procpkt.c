@@ -21,7 +21,7 @@
 
 void praw(const u_char *, u_int);
 void decode_ethernet(const u_char *);
-u_int decode_ip(const u_char *);
+void decode_ip(const u_char *, struct ip_stat *);
 void decode_icmp(const u_char *);
 u_int decode_tcp(const u_char *);
 u_short decode_udp(const u_char *);
@@ -44,12 +44,15 @@ void decode_ethernet(const u_char *data)
 }
 
 /* takes buffer, typecast it to an ip header and dissects it */
-u_int decode_ip(const u_char *data)
+void decode_ip(const u_char *data, struct ip_stat *ipstat)
 {
 
 	const struct ip_hdr *iphdr;
 
 	iphdr = (const struct ip_hdr *) data;
+	ipstat->ip_len = ntohs(iphdr->len);
+	ipstat->ip_prot = (u_int) iphdr->protocol;
+
 	printf("    [ Src IP:  %s \t]\n", 
 			inet_ntoa(*(struct in_addr *) &iphdr->src_addr));
 	printf("    [ Dst IP:  %s \t]\n", 
@@ -57,7 +60,6 @@ u_int decode_ip(const u_char *data)
 	printf("    [ Protocol: %u   ", (u_int) iphdr->protocol);
 	printf("ID: %hu   Length: %hu ]\n", ntohs(iphdr->id), 
 			                     ntohs(iphdr->len));
-	return (u_int) iphdr->protocol;
 }
 
 /* takes buffer, typecast it to an ip header and dissects it */
@@ -123,8 +125,8 @@ u_short decode_udp(const u_char *data)
 /* main processing function */
 void proc_packet(const u_char *data, u_int size)
 {	
-	u_int prot;
-	u_int dat_offs;
+	struct ip_stat istat;
+	u_int data_offs;
 	u_int tcp_hdr_sz;
 	u_int udp_hdr_sz;
 	
@@ -135,17 +137,20 @@ void proc_packet(const u_char *data, u_int size)
 	decode_ethernet(data);
 
 	/* obtain IP protocol number for further decoding */
-	prot = decode_ip(data + ETHER_HDR_LEN);
+	decode_ip(data + ETHER_HDR_LEN, &istat);
 	
-	switch(prot) {
+	switch(istat.ip_prot) {
 	case 1:
-		decode_icmp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		decode_icmp(data + ETHER_HDR_LEN + istat.ip_len);
+		data_offs = ETHER_HDR_LEN + istat.ip_len;
 		break;
 	case 6:
-		tcp_hdr_sz = decode_tcp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		tcp_hdr_sz = decode_tcp(data + ETHER_HDR_LEN + istat.ip_len);
+		data_offs = ETHER_HDR_LEN + istat.ip_len + tcp_hdr_sz;
 		break;
 	case 17:
-		udp_hdr_sz = decode_udp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		udp_hdr_sz = decode_udp(data + ETHER_HDR_LEN + istat.ip_len);
+		data_offs = ETHER_HDR_LEN + istat.ip_len + udp_hdr_sz;
 		break;
 	default:
 		break;
@@ -153,7 +158,7 @@ void proc_packet(const u_char *data, u_int size)
 
 
 	/* print raw encapsulated data */
-	praw(data + ETHER_HDR_LEN, size);
+	praw(data + data_offs, size);
 				
 
 }

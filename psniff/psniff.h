@@ -33,6 +33,11 @@
 /* procpkt.c */
 void proc_packet(const u_char *, u_int); 
 
+/* helper structure */
+struct ip_stat {
+	unsigned short ip_len;
+	unsigned short ip_prot;
+};
 
 /*
  * Ethernet frame header
