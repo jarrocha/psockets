@@ -140,15 +140,12 @@ void proc_packet(const u_char *data, u_int size)
 	switch(prot) {
 	case 1:
 		decode_icmp(data + ETHER_HDR_LEN + IP_HDR_LEN);
-		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN;
 		break;
 	case 6:
 		tcp_hdr_sz = decode_tcp(data + ETHER_HDR_LEN + IP_HDR_LEN);
-		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN + tcp_hdr_sz;
 		break;
 	case 17:
 		udp_hdr_sz = decode_udp(data + ETHER_HDR_LEN + IP_HDR_LEN);
-		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN + udp_hdr_sz;
 		break;
 	default:
 		break;
@@ -156,7 +153,7 @@ void proc_packet(const u_char *data, u_int size)
 
 
 	/* print raw encapsulated data */
-	praw(data + dat_offs, size);
+	praw(data + ETHER_HDR_LEN, size);
 				
 
 }

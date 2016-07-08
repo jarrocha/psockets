@@ -30,9 +30,6 @@
 #define BUFF 65536
 #define ETH_P_ALL 0x0003
 
-/* procpkt.c */
-void proc_packet(const u_char *, u_int); 
-
 
 /*
  * Ethernet frame header
@@ -52,6 +49,7 @@ struct ether_hdr {
  * Note: Supports Little-Endian only
  */
 
+#define IP_HDR_LEN 20
 struct ip_hdr {
 	unsigned char ver_ihl;
 	unsigned char tos;
@@ -107,7 +105,7 @@ struct udp_hdr {
  * ICMP Header
  */
 
-struct icmp_hdr
+struct icmphdr
 {
   	unsigned char type;
   	unsigned char code;
