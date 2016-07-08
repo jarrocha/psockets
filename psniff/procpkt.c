@@ -94,7 +94,13 @@ u_int decode_tcp(const u_char *data)
 /* takes buffer, typecast it to an ip header and dissects it */
 void decode_icmp(const u_char *data)
 {
+	const struct icmp_hdr *ihdr;
 
+	ihdr = (const struct icmp_hdr *) data;
+	
+	printf("\t[ Type: %u ] ", (u_int) ihdr->type);
+	printf("\t[ Code: %u ]\n", (u_int) ihdr->code);
+	printf("\t[ Gateway: %u]\n", ntohs(ihdr->gateway));
 }
 
 
@@ -118,6 +124,7 @@ u_short decode_udp(const u_char *data)
 void proc_packet(const u_char *data, u_int size)
 {	
 	u_int prot;
+	u_int dat_offs;
 	u_int tcp_hdr_sz;
 	u_int udp_hdr_sz;
 	
@@ -131,14 +138,17 @@ void proc_packet(const u_char *data, u_int size)
 	prot = decode_ip(data + ETHER_HDR_LEN);
 	
 	switch(prot) {
-	/*case 1:
-		decode_icmp(data);
-		break;*/
+	case 1:
+		decode_icmp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN;
+		break;
 	case 6:
 		tcp_hdr_sz = decode_tcp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN + tcp_hdr_sz;
 		break;
 	case 17:
 		udp_hdr_sz = decode_udp(data + ETHER_HDR_LEN + IP_HDR_LEN);
+		dat_offs = ETHER_HDR_LEN + IP_HDR_LEN + udp_hdr_sz;
 		break;
 	default:
 		break;
@@ -146,7 +156,7 @@ void proc_packet(const u_char *data, u_int size)
 
 
 	/* print raw encapsulated data */
-	praw(data, size);
+	praw(data + dat_offs, size);
 				
 
 }

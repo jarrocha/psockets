@@ -108,7 +108,7 @@ struct udp_hdr {
  * ICMP Header
  */
 
-struct icmphdr
+struct icmp_hdr
 {
   	unsigned char type;
   	unsigned char code;
