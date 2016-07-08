@@ -2,8 +2,11 @@
 This is a collection of projects that help in the understanding of the tools
 that we use everyday and we take for granted. Some of these tools will be
 analyzed on my blog to help newcomers into the field and give back to the 
-community. The programs that reach a more mature level will be moved to their 
-own repository. 
+community.  
+
+Programs in these repository are works in progress that might require some bug
+scrubbing. Though their main functionality works. The programs that reach a 
+more mature level will be moved to their own repository.
 
 Tools implemented so far:
 ----
