@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 					 &cl_size)) == -1)
 			err_msg("Error on recvfrom()");
 		proc_packet(buffer, rcv_bytes);
+		memset(buffer, 0, BUFF);
 	}
 
 	return 0;
