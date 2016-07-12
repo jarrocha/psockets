@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 			freeaddrinfo(rs);		
 		}
 	}
-	close(trx_fd);
+	shutdown(trx_fd, SHUT_WR);
 	exit(EXIT_SUCCESS);
 }
 
